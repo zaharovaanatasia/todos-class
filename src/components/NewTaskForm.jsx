@@ -1,19 +1,38 @@
+import { Component } from 'react'
 
+class NewTaskForm extends Component {
+	constructor() {
+		super()
+		this.state = { title: '' }
+		this.handleSubmit = this.handleSubmit.bind(this)
+		this.handleChange = this.handleChange.bind(this)
+	}
 
-const NewTaskForm = () => {
+	handleChange = e => {
+		this.setState({ title: e.target.value })
+	}
 
-	return (
-		<form>
-			<input
-				type='text'
-				className='new-todo'
-				placeholder='What needs to be done?'
-				autoFocus
-				required
-			/>
-		</form>
-	)
+	handleSubmit(event) {
+		event.preventDefault()
+		this.props.addTask(this.state.title)
+		this.setState({ title: '' })
+	}
 
+	render() {
+		return (
+			<form onSubmit={this.handleSubmit}>
+				<input
+					type='text'
+					className='new-todo'
+					placeholder='What needs to be done?'
+					autoFocus
+					required
+					value={this.state.title}
+					onChange={this.handleChange}
+				/>
+			</form>
+		)
+	}
 }
 
-export default NewTaskForm;
+export default NewTaskForm
