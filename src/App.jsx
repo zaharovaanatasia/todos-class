@@ -3,11 +3,21 @@ import { Component } from 'react'
 import NewTaskForm from './components/NewTaskForm'
 import Footer from './components/Footer'
 import TaskList from './components/TaskList'
+import PropTypes from 'prop-types'
 
 class App extends Component {
+	static defaultProps = {
+		tasks: [],
+		filter: 'All',
+	}
+
+	static propTypes = {
+		tasks: PropTypes.array,
+		filter: PropTypes.string,
+	}
+
 	constructor() {
 		super()
-
 		this.deleteTask = this.deleteTask.bind(this)
 		this.addTask = this.addTask.bind(this)
 		this.toggleTaskCompletion = this.toggleTaskCompletion.bind(this)
@@ -18,11 +28,7 @@ class App extends Component {
 	}
 
 	state = {
-		tasks: [
-			{ id: Date.now() + 1, title: 'Drink Coffee', completed: false },
-			{ id: Date.now() + 2, title: 'Learn React', completed: false },
-			{ id: Date.now() + 3, title: 'Play Games', completed: false },
-		],
+		tasks: [],
 		filter: 'All',
 	}
 
@@ -45,6 +51,7 @@ class App extends Component {
 			id: Date.now(),
 			title: newTitle,
 			completed: false,
+			createdAt: new Date(),
 		}
 		this.setState(prevState => ({
 			tasks: [newTask, ...prevState.tasks],

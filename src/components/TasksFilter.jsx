@@ -1,6 +1,17 @@
 import { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class TasksfIlter extends Component {
+	static defaultProps = {
+		filter: 'All',
+		filterTasks: () => {},
+	}
+
+	static propTypes = {
+		filter: PropTypes.string,
+		filterTasks: PropTypes.func,
+	}
+
 	render() {
 		const { filter, filterTasks } = this.props
 		return (

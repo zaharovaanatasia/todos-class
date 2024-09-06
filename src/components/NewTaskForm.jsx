@@ -1,6 +1,14 @@
 import { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class NewTaskForm extends Component {
+	static defaultProps = {
+		addTask: () => {},
+	}
+
+	static propTypes = {
+		addTask: PropTypes.func.isRequired,
+	}
 	constructor() {
 		super()
 		this.state = { title: '' }
@@ -8,7 +16,7 @@ class NewTaskForm extends Component {
 		this.handleChange = this.handleChange.bind(this)
 	}
 
-	handleChange = event => {
+	handleChange(event) {
 		this.setState({ title: event.target.value })
 	}
 

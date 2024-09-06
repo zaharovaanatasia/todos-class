@@ -1,13 +1,35 @@
 import { Component } from 'react'
+import PropTypes from 'prop-types'
+import { formatDistanceToNow } from 'date-fns'
 
 class Task extends Component {
+	static defaultProps = {
+		title: '',
+		completed: false,
+		toggleTaskCompletion: () => {},
+		deleteTask: () => {},
+		editTask: () => {},
+	}
+
+	static propTypes = {
+		id: PropTypes.number.isRequired,
+		title: PropTypes.string,
+		completed: PropTypes.bool,
+		createdAt: PropTypes.instanceOf(Date).isRequired,
+		toggleTaskCompletion: PropTypes.func.isRequired,
+		deleteTask: PropTypes.func.isRequired,
+		editTask: PropTypes.func.isRequired,
+	}
+
 	state = {
 		isEditing: false,
 		editedTitle: this.props.title,
 	}
 
 	handleEdit = () => {
-		this.setState({ isEditing: true })
+		if (!this.props.completed) {
+			this.setState({ isEditing: true })
+		}
 	}
 
 	handleSave = () => {
@@ -31,10 +53,20 @@ class Task extends Component {
 	}
 
 	render() {
-		const { id, title, completed, toggleTaskCompletion, deleteTask } =
-			this.props
+		const {
+			id,
+			title,
+			completed,
+			toggleTaskCompletion,
+			deleteTask,
+			createdAt,
+		} = this.props
 		const { isEditing, editedTitle } = this.state
 
+		const timeAgo = formatDistanceToNow(new Date(createdAt), {
+			addSuffix: true,
+			includeSeconds: true,
+		})
 		return (
 			<span
 				className={`task ${completed ? 'completed' : ''} ${
@@ -50,7 +82,7 @@ class Task extends Component {
 					/>
 					<label onClick={() => toggleTaskCompletion(id)}>
 						<span className='description'>{title}</span>
-						<span className='created'>created</span>
+						<span className='created'>created {timeAgo}</span>
 					</label>
 					<button className='icon icon-edit' onClick={this.handleEdit} />
 					<button
