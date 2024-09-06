@@ -3,7 +3,7 @@ import Task from './Task'
 
 class TaskList extends Component {
 	render() {
-		const { tasks, deleteTask, toggleTaskCompletion } = this.props
+		const { tasks, deleteTask, toggleTaskCompletion, editTask } = this.props
 		return (
 			<ul className='todo-list'>
 				{tasks.map(task => (
@@ -14,6 +14,7 @@ class TaskList extends Component {
 							completed={task.completed}
 							toggleTaskCompletion={toggleTaskCompletion}
 							deleteTask={() => deleteTask(task.id)}
+							editTask={editTask}
 						/>
 					</li>
 				))}

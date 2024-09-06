@@ -8,8 +8,8 @@ class NewTaskForm extends Component {
 		this.handleChange = this.handleChange.bind(this)
 	}
 
-	handleChange = e => {
-		this.setState({ title: e.target.value })
+	handleChange = event => {
+		this.setState({ title: event.target.value })
 	}
 
 	handleSubmit(event) {

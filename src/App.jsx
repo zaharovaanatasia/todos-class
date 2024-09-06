@@ -11,6 +11,10 @@ class App extends Component {
 		this.deleteTask = this.deleteTask.bind(this)
 		this.addTask = this.addTask.bind(this)
 		this.toggleTaskCompletion = this.toggleTaskCompletion.bind(this)
+		this.activeTasksCount = this.activeTasksCount.bind(this)
+		this.filterTasks = this.filterTasks.bind(this)
+		this.clearCompletedTasks = this.clearCompletedTasks.bind(this)
+		this.editTask = this.editTask.bind(this)
 	}
 
 	state = {
@@ -19,6 +23,7 @@ class App extends Component {
 			{ id: Date.now() + 2, title: 'Learn React', completed: false },
 			{ id: Date.now() + 3, title: 'Play Games', completed: false },
 		],
+		filter: 'All',
 	}
 
 	toggleTaskCompletion(taskId) {
@@ -46,7 +51,34 @@ class App extends Component {
 		}))
 	}
 
+	activeTasksCount() {
+		return this.state.tasks.filter(task => !task.completed).length
+	}
+
+	filterTasks(newFilter) {
+		this.setState({ filter: newFilter })
+	}
+	clearCompletedTasks() {
+		this.setState(prevState => ({
+			tasks: prevState.tasks.filter(task => !task.completed),
+		}))
+	}
+
+	editTask(taskId, newTitle) {
+		this.setState(prevState => ({
+			tasks: prevState.tasks.map(task =>
+				task.id === taskId ? { ...task, title: newTitle } : task
+			),
+		}))
+	}
 	render() {
+		const { tasks, filter } = this.state
+		const filteredTask = tasks.filter(task => {
+			if (filter === 'Active') return !task.completed
+			if (filter === 'Completed') return task.completed
+			return true // 'All'
+		})
+
 		return (
 			<section className='todoapp'>
 				<div className='app'>
@@ -56,11 +88,18 @@ class App extends Component {
 					</header>
 					<section className='main'>
 						<TaskList
-							tasks={this.state.tasks}
+							tasks={filteredTask}
 							toggleTaskCompletion={this.toggleTaskCompletion}
 							deleteTask={this.deleteTask}
+							editTask={this.editTask}
 						/>
-						<Footer />
+						<Footer
+							tasks={this.state.tasks}
+							activeTasksCount={this.activeTasksCount()}
+							filterTasks={this.filterTasks}
+							filter={filter}
+							clearCompletedTasks={this.clearCompletedTasks}
+						/>
 					</section>
 				</div>
 			</section>
